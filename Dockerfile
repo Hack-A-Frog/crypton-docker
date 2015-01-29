@@ -30,18 +30,20 @@ run cd redis-2.8.8 && make && make install
 run cp /redis-2.8.8/utils/redis_init_script /etc/init.d/redis_6379
 run mkdir -p /var/redis/6379
 run sed -i 's/daemonize no/daemonize yes/' /redis-2.8.8/redis.conf
+run sed -i 's/pidfile \/var\/run\/redis.pid/pidfile \/var\/run\/redis_6379.pid/' /redis-2.8.8/redis.conf
+run sed -i 's/logfile ""/logfile \/var\/log\/redis_6379.log/' /redis-2.8.8/redis.conf
+run mkdir -p /etc/redis
+run cp /redis-2.8.8/redis.conf /etc/redis/6379.conf
+run update-rc.d redis_6379 defaults
 
 # install node
-#run wget http://nodejs.org/dist/v0.10.26/node-v0.10.26.tar.gz
-#run tar xzf node-v0.10.26.tar.gz
-#run rm node-v0.10.26.tar.gz
-#run cd node-v0.10.26 && ./configure && make && make install
 run apt-get install -y nodejs npm
-
 run ln -s /usr/bin/nodejs /usr/bin/node
 
 # install postgres
 run apt-get install -y postgresql-9.3 postgresql-client-9.3 postgresql-contrib-9.3
+run service postgresql restart
+run sudo -u postgres psql postgres
 
 # phantomjs dependencies
 run apt-get install -y bzip2 curl libfreetype6 libfontconfig1
@@ -60,6 +62,8 @@ run npm config set registry http://registry.npmjs.org/
 
 # link crypton server
 run cd crypton/server && npm link
+
+run cd /crypton && make
 
 # expose only the crypton port
 expose 443
