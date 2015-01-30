@@ -39,3 +39,10 @@ in some other way, proceed with these commands in the cloned crypton-docker dire
 
 You can now access the crypton service locally on port 1025.  (Docker maps port 1025 on your Docker host to port
 1025 in the container.)
+
+Helpful Links
+-------------
+
+- https://crypton.io/blog/2014/10/09/lab-setup.html
+- https://coderwall.com/p/ewk0mq/stop-remove-all-docker-containers
+- http://webiphany.com/technology/2014/06/12/what-ip-do-i-access-when-using-docker-and-boot2docker.html
