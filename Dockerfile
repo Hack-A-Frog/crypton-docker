@@ -42,18 +42,18 @@ run ln -s /usr/bin/nodejs /usr/bin/node
 
 # install postgres
 run apt-get install -y postgresql-9.3 postgresql-client-9.3 postgresql-contrib-9.3
-run service postgresql restart
-run sudo -u postgres psql postgres
+run service postgresql restart; sudo -u postgres psql postgres
+#run sudo -u postgres psql postgres
 
 # phantomjs dependencies
 run apt-get install -y bzip2 curl libfreetype6 libfontconfig1
 
 #user postgres
-run echo "host all  all    0.0.0.0/0  trust" >> /etc/postgresql/9.3/main/pg_hba.conf
-run echo "listen_addresses='*'" >> /etc/postgresql/9.3/main/postgresql.conf
-run echo "local   all             all                                     trust" >> /etc/postgresql/9.3/main/pg_hba.conf
-run echo "host    all             all             127.0.0.1/32            trust" >> /etc/postgresql/9.3/main/pg_hba.conf
-run echo "host    all             all             ::1/128            trust" >> /etc/postgresql/9.3/main/pg_hba.conf
+run echo "listen_addresses='*'"							>> /etc/postgresql/9.3/main/postgresql.conf
+run echo "host    all             all             0.0.0.0/0          trust"	>> /etc/postgresql/9.3/main/pg_hba.conf
+run echo "local   all             all                                trust"	>> /etc/postgresql/9.3/main/pg_hba.conf
+run echo "host    all             all             127.0.0.1/32       trust"	>> /etc/postgresql/9.3/main/pg_hba.conf
+run echo "host    all             all             ::1/128            trust"	>> /etc/postgresql/9.3/main/pg_hba.conf
 
 # get crypton
 run git clone https://github.com/SpiderOak/crypton.git
@@ -63,7 +63,19 @@ run npm config set registry http://registry.npmjs.org/
 # link crypton server
 run cd crypton/server && npm link
 
-run cd /crypton && make
+run service redis_6379 start; service postgresql restart; cd /crypton && make
+
+run apt-get install -y openssh-server supervisor
+copy supervisord/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+copy supervisord/postgresql.sh /etc/supervisor/postgresql.sh
+run chmod 755 /etc/supervisor/postgresql.sh
+
+run mkdir -p /var/run/sshd /var/log/supervisor
+
+# Don't let redis start in the background
+run sed -i 's/daemonize yes/daemonize no/' /etc/redis/6379.conf 
+# Redis seems to be leaving around a PID file that prevents it from starting
+run rm -f rm /var/run/redis_6379.pid
 
 # expose only the crypton port
 expose 443

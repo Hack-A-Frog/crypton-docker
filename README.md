@@ -33,12 +33,31 @@ Now that you either have your new Linux VM ready to go with Docker, or you alrea
 in some other way, proceed with these commands in the cloned crypton-docker directory:
 
   ```
-  $ docker build -t crypton:0.1 .
-  $ docker run -i -t -p 1025:1025 crypton:0.1 /bin/bash
+  $ docker build -t crypton:0.2 .
+  $ docker run --name crypton -d -t -p 1025:1025 crypton:0.2 /usr/bin/supervisord
   ```
 
 You can now access the crypton service locally on port 1025.  (Docker maps port 1025 on your Docker host to port
 1025 in the container.)
+
+Note: There is still more work to be done with this Docker.  All of your data is stored INSIDE the container,
+so make sure you do not 'docker rm' the instance.  Also, to restart your crypton container use docker start:
+
+  ```
+  $ docker start crypton
+  ```
+
+You can also safely stop it using docker stop:
+
+   ```
+   $ docker stop crypton
+   ```
+
+Future Changes
+--------------
+
+ * Don't store any data inside the container.  Mount volumes from the host to store data.
+ * Remove or document the use of the sshd inside the container.
 
 Helpful Links
 -------------
