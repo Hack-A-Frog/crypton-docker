@@ -33,8 +33,8 @@ Now that you either have your new Linux VM ready to go with Docker, or you alrea
 in some other way, proceed with these commands in the cloned crypton-docker directory:
 
   ```
-  $ docker build -t crypton:0.2 .
-  $ docker run --name crypton -d -t -p 1025:1025 crypton:0.2 /usr/bin/supervisord
+  $ docker build -t crypton:0.1 .
+  $ docker run --name crypton -d -t -p 1025:1025 crypton:0.1 /usr/bin/supervisord
   ```
 
 You can now access the crypton service locally on port 1025.  (Docker maps port 1025 on your Docker host to port
