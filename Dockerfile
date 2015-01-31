@@ -1,6 +1,6 @@
 
 from ubuntu:14.04
-maintainer Cam Pedersen <cam@spideroak.com>
+maintainer Derek Smith <derek@goldenfrog.com>
 
 # housekeeping
 run apt-get update -y
