@@ -34,7 +34,8 @@ in some other way, proceed with these commands in the cloned crypton-docker dire
 
   ```
   $ docker build -t crypton:0.1 .
-  $ docker run --name crypton -d -t -p 1025:1025 crypton:0.1 /usr/bin/supervisord
+  $ mkdir /opt/crypton_html
+  $ docker run --name crypton -d -t -v /opt/crypton_html=/crypton_html -p 1025:1025 crypton:0.1 /usr/bin/supervisord
   ```
 
 You can now access the crypton service locally on port 1025.  (Docker maps port 1025 on your Docker host to port
